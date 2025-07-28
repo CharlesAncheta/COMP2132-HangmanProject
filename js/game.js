@@ -1,19 +1,20 @@
 let currentWord = "";
 let displayedWord = [];
 let wrongGuesses = 0;
-let maxWrong = 6;
+const maxWrong = 6;
+
+let jeepPosition = 0;
+const stepSize = 150;
 
 document.addEventListener("DOMContentLoaded", () => {
-  const hintEl = document.getElementById("hint");
-  const wordDisplay = document.getElementById("word-display");
-  const input = document.getElementById("guess-input");
-  const guessBtn = document.getElementById("guess-button");
-  const messageEl = document.getElementById("message");
-  const wrongCount = document.getElementById("wrong-count");
-  const playAgainBtn = document.getElementById("play-again");
   const carImage = document.getElementById("car-image");
+  const wordDisplay = document.getElementById("word-display");
+  const wrongCount = document.getElementById("wrong-count");
+  const messageEl = document.getElementById("message");
 
-  let guessedLetters = [];
+  const endScreen = document.getElementById("end-screen");
+  const endMessage = document.getElementById("end-message");
+  const restartBtn = document.getElementById("end-restart");
 
   function loadWord() {
     fetch("data/words.json")
@@ -21,9 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(data => {
         const random = data[Math.floor(Math.random() * data.length)];
         currentWord = random.word.toLowerCase();
-        hintEl.innerHTML = `<strong>Hint:</strong> ${random.hint}`;
+        document.getElementById("hint").innerHTML = `<strong>Hint:</strong> ${random.hint}`;
         displayedWord = Array(currentWord.length).fill("_");
         updateDisplay();
+        createKeyboard();
+        carImage.classList.add("jeep-driving");
       });
   }
 
@@ -33,81 +36,100 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateCarImage() {
-    carImage.className = "jeep"; // reset class
-    carImage.src = `images/car${wrongGuesses}.png`;
-
-    if (wrongGuesses === 1 || wrongGuesses === 2) {
-      carImage.classList.add("flame");
-    } else if (wrongGuesses === 3 || wrongGuesses === 4) {
-      carImage.classList.add("shake");
-    } else if (wrongGuesses === 5) {
-      carImage.classList.add("smoke");
-    } else if (wrongGuesses >= maxWrong) {
-      carImage.classList.add("destroyed");
-      document.body.classList.add("crash");
-    }
+    carImage.src = `img/car${Math.min(wrongGuesses, 6)}.png`;
   }
 
   function checkGameOver() {
     if (wrongGuesses >= maxWrong) {
-      messageEl.textContent = `You crashed! The word was: ${currentWord}`;
-      endGame();
+      carImage.classList.remove("jeep-driving");
+      carImage.classList.add("jeep-stopped");
+      updateCarImage();
+      showEndScreen(false);
     } else if (!displayedWord.includes("_")) {
       showWinScene();
-      endGame();
+      showEndScreen(true);
     }
   }
 
   function showWinScene() {
-    carImage.src = "images/escaped.png";
-    carImage.className = "jeep escaped";
-    messageEl.textContent = "You escaped the wasteland!";
+    carImage.src = "img/escaped.png";
+    carImage.classList.remove("jeep-stopped");
+    carImage.classList.add("jeep-driving");
+    carImage.style.transition = "left 2s ease";
+    carImage.style.left = "100%";
   }
 
-  function endGame() {
-    guessBtn.disabled = true;
-    input.disabled = true;
-    playAgainBtn.classList.remove("hidden");
+  function showEndScreen(won) {
+    if (won) {
+      endMessage.textContent = "🏁 You escaped the wasteland!";
+      endScreen.classList.add("active");
+    } else {
+      endMessage.textContent = `💥 You crashed! The word was: ${currentWord}`;
+      setTimeout(() => {
+        endScreen.classList.add("active");
+      }, 1500);
+    }
+    disableAllKeys();
+  }
+
+  function createKeyboard() {
+    const keyboard = document.getElementById("keyboard");
+    keyboard.innerHTML = "";
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    letters.split("").forEach(letter => {
+      const button = document.createElement("button");
+      button.textContent = letter;
+      button.classList.add("key");
+      button.dataset.letter = letter.toLowerCase();
+      button.addEventListener("click", handleGuess);
+      keyboard.appendChild(button);
+    });
+  }
+
+  function handleGuess(e) {
+    const button = e.target;
+    const letter = button.dataset.letter;
+
+    if (button.disabled) return;
+
+    button.disabled = true;
+    button.classList.add("used");
+
+    if (currentWord.includes(letter)) {
+      button.classList.add("correct");
+      currentWord.split("").forEach((l, i) => {
+        if (l === letter) displayedWord[i] = letter;
+      });
+
+      jeepPosition += stepSize;
+      carImage.style.left = `${jeepPosition}px`;
+    } else {
+      wrongGuesses++;
+      button.classList.add("wrong");
+      updateCarImage();
+    }
+
+    updateDisplay();
+    checkGameOver();
+  }
+
+  function disableAllKeys() {
+    document.querySelectorAll(".key").forEach(btn => btn.disabled = true);
   }
 
   function resetGame() {
-    guessedLetters = [];
     wrongGuesses = 0;
+    jeepPosition = 0;
+    displayedWord = [];
+    carImage.src = "img/car0.png";
+    carImage.style.left = "0";
+    carImage.className = "jeep jeep-driving";
+    endScreen.classList.remove("active");
     messageEl.textContent = "";
-    input.disabled = false;
-    guessBtn.disabled = false;
-    playAgainBtn.classList.add("hidden");
-    document.body.classList.remove("crash");
-    carImage.className = "jeep";
-    carImage.src = "images/car0.png";
-    input.value = "";
     loadWord();
   }
 
-  guessBtn.addEventListener("click", () => {
-    const letter = input.value.toLowerCase();
-    input.value = "";
-
-    if (letter && /^[a-z]$/.test(letter) && !guessedLetters.includes(letter)) {
-      guessedLetters.push(letter);
-
-      if (currentWord.includes(letter)) {
-        for (let i = 0; i < currentWord.length; i++) {
-          if (currentWord[i] === letter) {
-            displayedWord[i] = letter;
-          }
-        }
-      } else {
-        wrongGuesses++;
-        updateCarImage();
-      }
-
-      updateDisplay();
-      checkGameOver();
-    }
-  });
-
-  playAgainBtn.addEventListener("click", resetGame);
-
+  restartBtn.addEventListener("click", resetGame);
   loadWord();
 });

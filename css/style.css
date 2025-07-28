@@ -1,27 +1,30 @@
-* {
-  box-sizing: border-box;
+/* Base layout */
+html, body {
+  height: 100%;
+  background-color: #000;
   margin: 0;
   padding: 0;
-}
-
-body {
-  background-color: #000;
   font-family: Arial, sans-serif;
   color: #000;
 }
-body.crash {
-  animation: flashRed 0.3s ease-in-out infinite alternate;
+
+* {
+  box-sizing: border-box;
 }
 
+/* Main wrapper */
 .container {
+  min-height: 100vh;
   max-width: 1050px;
-  margin: 30px auto;
+  margin: 0 auto;
   background-color: #fff;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
 }
 
+/* Header section */
 header {
   background-color: #004c99;
   color: white;
@@ -34,6 +37,74 @@ header h1 {
   font-size: 2rem;
 }
 
+/* Game scene fills all available vertical space */
+.game-area {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Background layers stretch to fill .game-area */
+.background-layers {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+  min-height: 180px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.background-layers .layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.background-layers .bg { z-index: 1; }
+.background-layers .far { z-index: 2; }
+.background-layers .mid { z-index: 3; }
+.background-layers .front { z-index: 4; }
+.background-layers .road { z-index: 5; }
+
+/* Jeep */
+.background-layers .jeep {
+  position: absolute;
+  bottom: 0;
+  width: 400px;
+  z-index: 6;
+  left: 0;
+  transition: left 0.5s ease;
+  image-rendering: pixelated;
+}
+
+/* Jeep driving animation */
+.jeep-driving {
+  animation: driveAnim 1s linear infinite;
+}
+
+@keyframes driveAnim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.jeep-stopped {
+  animation: none;
+  filter: grayscale(100%) brightness(30%);
+}
+
+/* Gameplay content */
 section {
   background-color: #fff;
   border-radius: 10px;
@@ -50,132 +121,123 @@ section {
   margin-bottom: 20px;
 }
 
-.input-area {
+/* On-screen keyboard */
+.keyboard {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 15px;
+  max-width: 600px;
+  margin: 20px auto;
 }
-.input-area input {
-  font-size: 1.2rem;
-  padding: 5px;
-  width: 50px;
-  text-align: center;
-}
-.input-area button {
-  padding: 5px 10px;
-  font-size: 1rem;
+
+.key {
+  font-size: 1.1rem;
+  width: 40px;
+  height: 40px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.key:hover:not(:disabled) {
+  transform: scale(1.1);
+  background-color: #555;
+}
+
+.key.used {
+  background-color: #444;
+  color: #999;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+.key.correct {
+  background-color: #2ecc71 !important;
+}
+
+.key.wrong {
+  background-color: #e74c3c !important;
 }
 
 .hidden {
   display: none;
 }
 
-.background-layers {
-  position: relative;
-  width: 100%;
-  height: 250px;
+/* End screen */
+.end-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(30, 0, 0, 0.9);
+  padding: 30px;
+  border-radius: 12px;
+  z-index: 101;
+  color: white;
+  display: none;
+  text-align: center;
+  max-width: 90%;
+}
+.end-screen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.end-message {
+  font-size: 2rem;
   margin-bottom: 20px;
 }
-.background-layers .layer {
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
-  image-rendering: pixelated;
+
+#end-restart {
+  font-size: 1.2rem;
+  padding: 12px 24px;
+  background-color: #004c99;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
-.background-layers .bg {
-  z-index: 1;
-}
-.background-layers .far {
-  z-index: 2;
-}
-.background-layers .mid {
-  z-index: 3;
-}
-.background-layers .front {
-  z-index: 4;
-}
-.background-layers .road {
-  z-index: 5;
-}
-.background-layers .jeep {
-  position: absolute;
-  width: 180px;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 6;
-  image-rendering: pixelated;
+#end-restart:hover {
+  background-color: #0066cc;
 }
 
-@keyframes flameFlicker {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .keyboard {
+    gap: 6px;
   }
-  50% {
-    transform: translateY(-3px) scale(1.05);
-    opacity: 0.8;
+
+  .key {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
   }
-}
-@keyframes shake {
-  0% {
-    transform: translateX(0);
+
+  .container {
+    padding: 10px;
   }
-  25% {
-    transform: translateX(-4px);
+
+  .background-layers .jeep {
+    width: 90px;
   }
-  50% {
-    transform: translateX(4px);
-  }
-  75% {
-    transform: translateX(-2px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-@keyframes smokeRise {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-10px) scale(1.2);
-    opacity: 0;
-  }
-}
-@keyframes flashRed {
-  0% {
-    background-color: #000;
-  }
-  100% {
-    background-color: #300;
-  }
-}
-@keyframes slideOut {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(150%);
+
+  section, header {
+    padding: 10px;
   }
 }
 
-.jeep.flame {
-  animation: flameFlicker 0.5s infinite;
-}
-.jeep.shake {
-  animation: shake 0.4s infinite;
-}
-.jeep.smoke {
-  animation: smokeRise 1.2s infinite;
-}
-.jeep.destroyed {
-  filter: grayscale(80%) brightness(70%);
-}
-.jeep.escaped {
-  animation: slideOut 1s ease forwards;
+@media (max-height: 500px) {
+  .container {
+    padding: 10px;
+  }
+
+  .background-layers {
+    height: 150px;
+  }
 }

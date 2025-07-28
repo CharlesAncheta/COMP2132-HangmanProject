@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Hangman Game</title>
+  <meta charset="UTF-8" />
+  <title>Jeep Hangman: Post-Apocalypse</title>
+  <link rel="stylesheet" href="css/style.css">
   <script defer src="js/game.js"></script>
 </head>
 <body>
-  <h1>Hangman Game</h1>
-  <p id="hint"></p>
-  <p id="word-display"></p>
-  <input type="text" id="guess-input" maxlength="1">
-  <button id="guess-button">Guess</button>
-  <p id="message"></p>
-  <p>Wrong guesses: <span id="wrong-count">0</span>/6</p>
-  <button id="play-again" style="display:none;">Play Again</button>
+  <div class="container">
+    <header>
+      <h1>Jeep Hangman: Post-Apocalypse</h1>
+    </header>
+
+    <div class="game-area">
+      <div class="background-layers">
+        <img src="img/clouds2.png" class="layer bg" alt="clouds">
+        <img src="img/ground&houses_bg.png" class="layer far" alt="distant houses">
+        <img src="img/ground&houses.png" class="layer mid" alt="foreground buildings">
+        <img src="img/fence.png" class="layer front" alt="fence">
+        <img src="img/road.png" class="layer road" alt="road">
+        <img src="img/car0.png" class="jeep" id="car-image" alt="Jeep">
+      </div>
+
+      <!-- End Game Overlay -->
+      <div id="end-screen" class="end-screen">
+        <div class="end-message" id="end-message"></div>
+        <button id="end-restart">Play Again</button>
+      </div>
+    </div>
+
+    <section>
+      <p id="hint"><strong>Hint:</strong> </p>
+      <p id="word-display" class="word"></p>
+      <div class="keyboard" id="keyboard"></div>
+      <p>Wrong guesses: <span id="wrong-count">0</span> / 6</p>
+      <p id="message"></p>
+    </section>
+  </div>
 </body>
 </html>
