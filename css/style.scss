@@ -1,3 +1,6 @@
+// ==============================
+// Variables
+// ==============================
 html, body {
   height: 100%;
   background-color: #000;
@@ -20,9 +23,9 @@ html, body {
   padding: 20px;
   display: flex;
   flex-direction: column;
-}
-@media (max-width: 600px), (max-height: 500px) {
-  .container {
+
+  @media (max-width: 600px),
+         (max-height: 500px) {
     padding: 10px;
   }
 }
@@ -34,12 +37,12 @@ header {
   border-radius: 5px;
   text-align: center;
   margin-bottom: 20px;
-}
-header h1 {
-  font-size: 2rem;
-}
-@media (max-width: 600px) {
-  header {
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 600px) {
     padding: 10px;
   }
 }
@@ -65,68 +68,57 @@ header h1 {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-}
-@media (max-height: 500px) {
-  .background-layers {
+
+  @media (max-height: 500px) {
     height: 150px;
   }
-}
-.background-layers .layer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  -o-object-fit: cover;
-     object-fit: cover;
-  image-rendering: pixelated;
-}
-.background-layers .bg {
-  z-index: 1;
-}
-.background-layers .far {
-  z-index: 2;
-}
-.background-layers .mid {
-  z-index: 3;
-}
-.background-layers .front {
-  z-index: 4;
-}
-.background-layers .road {
-  z-index: 5;
-}
-.background-layers .jeep {
-  position: absolute;
-  bottom: 0;
-  width: 400px;
-  z-index: 6;
-  left: 0;
-  transform: none;
-  transition: left 0.5s ease;
-  image-rendering: pixelated;
-}
-.background-layers .jeep.jeep-driving {
-  animation: driveAnim 1s linear infinite;
-}
-.background-layers .jeep.jeep-stopped {
-  animation: none;
-  filter: grayscale(100%) brightness(30%);
-}
-@media (max-width: 600px) {
-  .background-layers .jeep {
-    width: 180px;
+
+  .layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    image-rendering: pixelated;
+  }
+
+  .bg    { z-index: 1; }
+  .far   { z-index: 2; }
+  .mid   { z-index: 3; }
+  .front { z-index: 4; }
+  .road  { z-index: 5; }
+
+  .jeep {
+    position: absolute;
+    bottom: 0;
+    width: 400px;
+    z-index: 6;
+    left: 0;            
+    transform: none;     
+    transition: left 0.5s ease;
+    image-rendering: pixelated;
+
+    &.jeep-driving {
+      animation: driveAnim 1s linear infinite;
+    }
+
+    &.jeep-stopped {
+      animation: none;
+      filter: grayscale(100%) brightness(30%);
+    }
+
+    @media (max-width: 600px) {
+      width: 180px;
+    }
   }
 }
 
 @keyframes driveAnim {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-2px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
 }
+
 section {
   background-color: #fff;
   border-radius: 10px;
@@ -134,9 +126,8 @@ section {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
   border: 2px solid #004c99;
   margin: 20px 0;
-}
-@media (max-width: 600px) {
-  section {
+
+  @media (max-width: 600px) {
     padding: 10px;
   }
 }
@@ -155,9 +146,8 @@ section {
   gap: 10px;
   max-width: 600px;
   margin: 20px auto;
-}
-@media (max-width: 600px) {
-  .keyboard {
+
+  @media (max-width: 600px) {
     gap: 6px;
   }
 }
@@ -172,25 +162,28 @@ section {
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s, background-color 0.3s;
-}
-.key:hover:not(:disabled) {
-  transform: scale(1.1);
-  background-color: #555;
-}
-.key.used {
-  background-color: #444;
-  color: #999;
-  cursor: not-allowed;
-  transform: scale(1);
-}
-.key.correct {
-  background-color: #2ecc71 !important;
-}
-.key.wrong {
-  background-color: #e74c3c !important;
-}
-@media (max-width: 600px) {
-  .key {
+
+  &:hover:not(:disabled) {
+    transform: scale(1.1);
+    background-color: #555;
+  }
+
+  &.used {
+    background-color: #444;
+    color: #999;
+    cursor: not-allowed;
+    transform: scale(1);
+  }
+
+  &.correct {
+    background-color: #2ecc71 !important;
+  }
+
+  &.wrong {
+    background-color: #e74c3c !important;
+  }
+
+  @media (max-width: 600px) {
     width: 30px;
     height: 30px;
     font-size: 1rem;
@@ -214,11 +207,12 @@ section {
   display: none;
   text-align: center;
   max-width: 90%;
-}
-.end-screen.active {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+  &.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .end-message {
@@ -235,7 +229,8 @@ section {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-#end-restart:hover {
-  background-color: #0066cc;
+
+  &:hover {
+    background-color: #0066cc;
+  }
 }

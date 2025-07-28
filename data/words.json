@@ -1,5 +1,20 @@
 [
   { "word": "beagle", "hint": "A dog breed with great sense of smell." },
   { "word": "jupiter", "hint": "Largest planet in the solar system." },
-  { "word": "python", "hint": "A popular programming language and a snake." }
+  { "word": "python", "hint": "A popular programming language and a snake." },
+  { "word": "oxygen", "hint": "Essential gas we breathe." },
+  { "word": "volcano", "hint": "A mountain that erupts." },
+  { "word": "python", "hint": "A popular programming language." },
+  { "word": "giraffe", "hint": "Tallest land animal." },
+  { "word": "desert", "hint": "A very dry region." },
+  { "word": "sakura", "hint": "Japanese cherry blossom." },
+  { "word": "telescope", "hint": "Used to view distant stars." },
+  { "word": "museum", "hint": "Place for historical artifacts." },
+  { "word": "glacier", "hint": "Large slow-moving ice mass." },
+  { "word": "astronaut", "hint": "A person who travels in space." },
+  { "word": "oxygen", "hint": "Element with atomic number 8." },
+  { "word": "hangman", "hint": "This game’s name." },
+  { "word": "bicycle", "hint": "Two-wheeled transport." },
+  { "word": "diamond", "hint": "Hardest natural material." },
+  { "word": "zeppelin", "hint": "An old airship type." }
 ]
