@@ -1,0 +1,181 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #000;
+  font-family: Arial, sans-serif;
+  color: #000;
+}
+body.crash {
+  animation: flashRed 0.3s ease-in-out infinite alternate;
+}
+
+.container {
+  max-width: 1050px;
+  margin: 30px auto;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+header {
+  background-color: #004c99;
+  color: white;
+  padding: 25px;
+  border-radius: 5px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+header h1 {
+  font-size: 2rem;
+}
+
+section {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  border: 2px solid #004c99;
+  margin: 20px 0;
+}
+
+.word {
+  font-size: 1.8rem;
+  letter-spacing: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input-area {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.input-area input {
+  font-size: 1.2rem;
+  padding: 5px;
+  width: 50px;
+  text-align: center;
+}
+.input-area button {
+  padding: 5px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.background-layers {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  margin-bottom: 20px;
+}
+.background-layers .layer {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  image-rendering: pixelated;
+}
+.background-layers .bg {
+  z-index: 1;
+}
+.background-layers .far {
+  z-index: 2;
+}
+.background-layers .mid {
+  z-index: 3;
+}
+.background-layers .front {
+  z-index: 4;
+}
+.background-layers .road {
+  z-index: 5;
+}
+.background-layers .jeep {
+  position: absolute;
+  width: 180px;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  image-rendering: pixelated;
+}
+
+@keyframes flameFlicker {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-3px) scale(1.05);
+    opacity: 0.8;
+  }
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes smokeRise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10px) scale(1.2);
+    opacity: 0;
+  }
+}
+@keyframes flashRed {
+  0% {
+    background-color: #000;
+  }
+  100% {
+    background-color: #300;
+  }
+}
+@keyframes slideOut {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+.jeep.flame {
+  animation: flameFlicker 0.5s infinite;
+}
+.jeep.shake {
+  animation: shake 0.4s infinite;
+}
+.jeep.smoke {
+  animation: smokeRise 1.2s infinite;
+}
+.jeep.destroyed {
+  filter: grayscale(80%) brightness(70%);
+}
+.jeep.escaped {
+  animation: slideOut 1s ease forwards;
+}
